@@ -7,16 +7,16 @@ import java.sql.SQLException;
 class DriverOperations
 {
     // Insert new driver
-    public void InsertDriver(){}
+    public void InsertDriver(String DriverName){}
 
     // Delete driver by ID
-    public void DeleteDriver(){}
+    public void DeleteDriver(int DriverID){}
 
     // Update driver information
-    public void UpdateDriver(){}
+    public void UpdateDriverName(int DriverID, String DriverName){}
 
     // Select driver by name
-    public void SelectDriverByName(){}
+    public void SelectDriverByName(String DriverName){}
 
     // Simple JOIN query:
     // Get drivers with their delivery trips

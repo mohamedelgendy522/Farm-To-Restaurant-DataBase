@@ -7,16 +7,16 @@ import java.sql.SQLException;
 class FarmOperations
 {
     // Insert new farm
-    public void InsertFarm(){}
+    public void InsertFarm(String FarmName , String City , String Region){}
 
     // Delete farm by ID
-    public void DeleteFarm(){}
+    public void DeleteFarm(int farmID){}
 
     // Update farm information
-    public void UpdateFarm(){}
+    public void UpdateFarmName(int farmID,String farmName){}
 
-    // Select farms by region or city
-    public void SelectFarmByLocation(){}
+    // Select farms by city
+    public void SelectFarmBycity(String City){}
 
     // Simple JOIN query:
     // Get farms with their harvest batches

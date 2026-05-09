@@ -7,16 +7,16 @@ import java.sql.SQLException;
 class RestaurantOperations
 {
     // Insert new restaurant
-    public void InsertRestaurant(){}
+    public void InsertRestaurant(String RestaurantName, String City, String Street, String PreferredDeliveryTime){}
 
     // Delete restaurant by ID
-    public void DeleteRestaurant(){}
+    public void DeleteRestaurant(int RestaurantID){}
 
     // Update restaurant information
-    public void UpdateRestaurant(){}
+    public void UpdateRestaurant(int RestaurantID, String RestaurantName, String City, String Street){}
 
     // Select restaurants by city
-    public void SelectRestaurantsByCity(){}
+    public void SelectRestaurantsByCity(String City){}
 
     // Simple JOIN query:
     // Get restaurants with their orders

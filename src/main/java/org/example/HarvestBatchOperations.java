@@ -7,13 +7,13 @@ import java.sql.SQLException;
 class HarvestBatchOperations
 {
     // Insert new harvest batch
-    public void InsertHarvestBatch(){}
+    public void InsertHarvestBatch(int FarmID, String HarvestDate, int Quantity, String PreferredDeliveryTime){}
 
     // Delete batch by ID
-    public void DeleteHarvestBatch(){}
+    public void DeleteHarvestBatch(int BatchID){}
 
     // Update batch information
-    public void UpdateHarvestBatch(){}
+    public void UpdateHarvestBatch(int BatchID, int Quantity){}
 
     // Select available batches only
     public void SelectAvailableBatches(){}
