@@ -10,7 +10,6 @@ public class InquiryService {
 
     private Connection conn;
 
-    // Constructor to initialize DB connection
     public InquiryService() {
         try {
             String user = "sa";

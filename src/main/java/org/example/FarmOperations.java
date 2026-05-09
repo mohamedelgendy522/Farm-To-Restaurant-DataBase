@@ -6,6 +6,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 class FarmOperations
 {
+    private Connection conn;
+
+    public FarmOperations() {
+        try {
+            String user = "sa";
+            String pass = "123456";
+            String url =
+                    "jdbc:sqlserver://localhost:1433;"
+                            +"databaseName=FarmRestaurantDB;"
+                            + "encrypt=true;"
+                            + "trustServerCertificate=true;";
+
+            conn = DriverManager.getConnection(url, user, pass);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Insert new farm
     public void InsertFarm(String FarmName , String City , String Region){}
 
