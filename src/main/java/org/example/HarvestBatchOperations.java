@@ -68,7 +68,24 @@ class HarvestBatchOperations
     }
 
     // Update batch information
-    public void UpdateHarvestBatch(int BatchID, int Quantity){}
+    public void UpdateHarvestBatch(int BatchID, int AvailableQuantity){
+        String query =
+                "update HarvestBatch set AvailableQuantity = ? where BatchID = ?";
+
+        try (
+                PreparedStatement stmt = conn.prepareStatement(query)
+        ){
+            stmt.setInt(1,AvailableQuantity);
+            stmt.setInt(2,BatchID);
+
+            stmt.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     // Select available batches only
     public void SelectAvailableBatches(){}
