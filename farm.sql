@@ -1,23 +1,8 @@
-IF DB_ID(N'FarmRestaurantDB') IS NULL
-BEGIN
-    CREATE DATABASE FarmRestaurantDB;
-END;
-GO
 
 USE FarmRestaurantDB;
 GO
 
 
-DROP TABLE IF EXISTS dbo.OrderBatch;
-DROP TABLE IF EXISTS dbo.FarmCropType;
-DROP TABLE IF EXISTS dbo.Orders;
-DROP TABLE IF EXISTS dbo.HarvestBatch;
-DROP TABLE IF EXISTS dbo.DeliveryTrip;
-DROP TABLE IF EXISTS dbo.Restaurant;
-DROP TABLE IF EXISTS dbo.Driver;
-DROP TABLE IF EXISTS dbo.CropType;
-DROP TABLE IF EXISTS dbo.Farm;
-GO
 
 CREATE TABLE dbo.Farm (
     FarmID INT IDENTITY(1,1) PRIMARY KEY,
@@ -243,3 +228,199 @@ INSERT INTO dbo.OrderBatch (OrderID, BatchID, QuantityOrdered, PriceAtOrder) VAL
 (10, 10,  40,   7.25);
 GO
 
+/* FARM */
+/* INSERT */
+INSERT INTO dbo.Farm (FarmName, City, Region) VALUES (?, ?, ?);
+/* SELECT BY CITY*/
+SELECT FarmID, FarmName, City, Region FROM dbo.Farm WHERE City = ?
+/* UPDATE BY NAME */
+UPDATE dbo.Farm SET FarmName = ? WHERE FarmID = ?;
+/* DELETE BY ID*/
+DELETE FROM dbo.Farm WHERE FarmID = ?;
+/* GetFarmHarvestBatches */
+SELECT
+    f.FarmID,
+    f.FarmName,
+    hb.BatchID,
+    hb.HarvestDate,
+    hb.AvailableQuantity,
+    hb.FreshnessWindow,
+    ct.CropName
+FROM dbo.Farm f
+         JOIN dbo.HarvestBatch hb
+              ON f.FarmID = hb.FarmID
+         JOIN dbo.CropType ct
+              ON hb.CropTypeID = ct.CropTypeID
+ORDER BY f.FarmID, hb.BatchID;
+
+
+/* RESTAURANT */
+/* INSERT */
+INSERT INTO dbo.Restaurant (RestaurantName, City, Street, PreferredDeliveryWindow) VALUES (?, ?, ?, ?);
+/* SELECT BY CITY */
+SELECT RestaurantID, RestaurantName, City, Street, PreferredDeliveryWindow FROM dbo.Restaurant WHERE City = ?;
+/* SELECT BY ID */
+SELECT RestaurantID, RestaurantName, City, Street, PreferredDeliveryWindow FROM dbo.Restaurant WHERE RestaurantID = ?;
+/* UPDATE BY ID */
+UPDATE dbo.Restaurant SET RestaurantName = ?, City = ?, Street = ?, PreferredDeliveryWindow = ? WHERE RestaurantID = ?;
+/* DELETE BY ID */
+DELETE FROM dbo.Restaurant WHERE RestaurantID = ?;
+/* GetRestaurantOrders */
+SELECT r.RestaurantID,
+       r.RestaurantName,
+       o.OrderID,
+       o.OrderDate,
+       o.TotalAmount,
+       dt.TripID
+FROM dbo.Restaurant r
+         JOIN dbo.Orders o ON r.RestaurantID = o.RestaurantID
+         JOIN dbo.DeliveryTrip dt ON o.TripID = dt.TripID
+WHERE r.RestaurantID = ?
+ORDER BY o.OrderID;
+
+
+/* DRIVER */
+/* INSERT */
+INSERT INTO dbo.Driver (DriverName) VALUES (?);
+/* SELECT BY NAME */
+SELECT DriverID, DriverName FROM dbo.Driver WHERE DriverName = ?;
+/* UPDATE BY ID */
+UPDATE dbo.Driver SET DriverName = ? WHERE DriverID = ?;
+/* DELETE BY ID */
+DELETE FROM dbo.Driver WHERE DriverID = ?;
+/* GetDriverTrips */
+SELECT d.DriverID,
+       d.DriverName,
+       dt.TripID,
+       dt.Route,
+       dt.TotalDistance,
+       dt.Status,
+       dt.TripDate
+FROM dbo.Driver d
+         JOIN dbo.DeliveryTrip dt ON d.DriverID = dt.DriverID
+WHERE d.DriverID = ?
+ORDER BY dt.TripDate;
+
+
+
+
+/* HARVEST BATCH */
+/* INSERT */
+INSERT INTO dbo.HarvestBatch (HarvestDate, AvailableQuantity, FreshnessWindow, FarmID, CropTypeID) VALUES (?, ?, ?, ?, ?);
+/* SELECT BY ID */
+SELECT BatchID, HarvestDate, AvailableQuantity, FreshnessWindow, FarmID, CropTypeID FROM dbo.HarvestBatch WHERE BatchID = ?;
+/* SELECT BY FARM */
+SELECT BatchID, HarvestDate, AvailableQuantity, FreshnessWindow, FarmID, CropTypeID FROM dbo.HarvestBatch WHERE FarmID = ?;
+/* UPDATE BY ID */
+UPDATE dbo.HarvestBatch SET HarvestDate = ?, AvailableQuantity = ?, FreshnessWindow = ?, FarmID = ?, CropTypeID = ? WHERE BatchID = ?;
+/* DELETE BY ID */
+DELETE FROM dbo.HarvestBatch WHERE BatchID = ?;
+/* GetHarvestBatchAvailability */
+SELECT hb.BatchID,
+       hb.HarvestDate,
+       hb.AvailableQuantity,
+       hb.FreshnessWindow,
+       f.FarmName,
+       ct.CropName
+FROM dbo.HarvestBatch hb
+         JOIN dbo.Farm f ON hb.FarmID = f.FarmID
+         JOIN dbo.CropType ct ON hb.CropTypeID = ct.CropTypeID
+WHERE hb.BatchID = ?
+ORDER BY hb.BatchID;
+
+
+/* INQUIRY SERVICE */
+/* GetTopCropType */
+SELECT TOP 1
+    ct.CropName,
+    COUNT(DISTINCT o.OrderID) AS TotalOrders
+FROM dbo.CropType ct
+JOIN dbo.HarvestBatch hb
+    ON ct.CropTypeID = hb.CropTypeID
+JOIN dbo.OrderBatch oi
+    ON hb.BatchID = oi.BatchID
+JOIN dbo.Orders o
+    ON oi.OrderID = o.OrderID
+GROUP BY ct.CropName
+ORDER BY TotalOrders DESC;
+
+
+/* GetInactiveFarmsLastMonth */
+SELECT f.FarmID, f.FarmName
+FROM dbo.Farm f
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM dbo.HarvestBatch hb
+    JOIN dbo.OrderBatch oi
+        ON hb.BatchID = oi.BatchID
+    JOIN dbo.Orders o
+        ON oi.OrderID = o.OrderID
+    WHERE hb.FarmID = f.FarmID
+      AND o.OrderDate >= DATEADD(MONTH, -1, GETDATE())
+);
+
+
+/* GetTopDriverLastMonth */
+SELECT TOP 1
+       d.DriverID,
+       d.DriverName,
+       COUNT(t.TripID) AS CompletedTrips
+FROM dbo.Driver d
+JOIN dbo.DeliveryTrip t
+    ON d.DriverID = t.DriverID
+WHERE t.Status = 'Completed'
+  AND t.TripDate >= DATEADD(MONTH, -1, GETDATE())
+GROUP BY d.DriverID, d.DriverName
+ORDER BY CompletedTrips DESC;
+
+
+/* GetRestaurantsWithoutOrders */
+SELECT r.RestaurantID, r.RestaurantName
+FROM dbo.Restaurant r
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM dbo.Orders o
+    WHERE o.RestaurantID = r.RestaurantID
+      AND o.OrderDate >= DATEADD(MONTH, -1, GETDATE())
+);
+
+
+/* GetRestaurantDeliveredBatches */
+SELECT
+    r.RestaurantID,
+    r.RestaurantName,
+    hb.BatchID,
+    ct.CropName,
+    o.OrderID
+FROM dbo.Restaurant r
+JOIN dbo.Orders o
+    ON r.RestaurantID = o.RestaurantID
+JOIN dbo.OrderBatch oi
+    ON o.OrderID = oi.OrderID
+JOIN dbo.HarvestBatch hb
+    ON oi.BatchID = hb.BatchID
+JOIN dbo.CropType ct
+    ON hb.CropTypeID = ct.CropTypeID
+JOIN dbo.DeliveryTrip dt
+    ON o.TripID = dt.TripID
+WHERE dt.Status = 'Completed'
+ORDER BY r.RestaurantID, o.OrderID;
+
+
+/* GetFarmRevenue */
+SELECT
+    f.FarmID,
+    f.FarmName,
+    SUM(oi.QuantityOrdered * oi.PriceAtOrder) AS TotalRevenue
+FROM dbo.Farm f
+JOIN dbo.HarvestBatch hb
+    ON f.FarmID = hb.FarmID
+JOIN dbo.OrderBatch oi
+    ON hb.BatchID = oi.BatchID
+JOIN dbo.Orders o
+    ON oi.OrderID = o.OrderID
+JOIN dbo.DeliveryTrip dt
+    ON o.TripID = dt.TripID
+WHERE dt.Status = 'Completed'
+GROUP BY f.FarmID, f.FarmName
+ORDER BY TotalRevenue DESC;
