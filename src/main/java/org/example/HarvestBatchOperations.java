@@ -114,5 +114,29 @@ class HarvestBatchOperations
 
     // Simple JOIN query:
     // Get harvest batches with crop types
-    public void GetBatchCropTypes(){}
+    public void GetBatchCropTypes() {
+
+        String query =
+                "SELECT h.BatchID, h.AvailableQuantity, h.HarvestDate, c.CropName " +
+                "FROM HarvestBatch h , CropType c " +
+                "WHERE h.CropTypeID = c.CropTypeID";
+
+        try (
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()
+        ) {
+
+            while (rs.next()) {
+
+                System.out.println(
+                        "Batch ID: " + rs.getInt("BatchID") +
+                        ", CropName: " + rs.getString("CropName")
+                );
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
