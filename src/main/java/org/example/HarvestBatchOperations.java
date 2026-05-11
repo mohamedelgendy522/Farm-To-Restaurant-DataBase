@@ -22,10 +22,10 @@ class HarvestBatchOperations
     }
 
     // Insert new harvest batch
-    public void InsertHarvestBatch(int FarmID, String HarvestDate, int AvailableQuantity, int FreshnessWindow,int croptypeID){
+    public void InsertHarvestBatch(int FarmID, String HarvestDate, int AvailableQuantity, int FreshnessWindow, int CropTypeID){
 
         String query =
-                "INSERT INTO dbo.HarvestBatch(FarmID, HarvestDate, AvailableQuantity, FreshnessWindow,croptypeID) VALUES (?,?,?,?,?)";
+                "INSERT INTO dbo.HarvestBatch(FarmID, HarvestDate, AvailableQuantity, FreshnessWindow, CropTypeID) VALUES (?,?,?,?,?)";
 
         try (
                 PreparedStatement stmt = conn.prepareStatement(query)
@@ -34,7 +34,7 @@ class HarvestBatchOperations
              stmt.setString(2,HarvestDate);
              stmt.setInt(3,AvailableQuantity);
              stmt.setInt(4,FreshnessWindow);
-             stmt.setInt(5,croptypeID);
+             stmt.setInt(5,CropTypeID);
             stmt.executeUpdate();
 
 
@@ -47,7 +47,7 @@ class HarvestBatchOperations
    public void DeleteHarvestBatch(int BatchID){
 
         String query =
-                "delete HarvestBatch where BatchID = ?";
+                "DELETE FROM dbo.HarvestBatch WHERE BatchID = ?";
 
         try (
                 PreparedStatement stmt = conn.prepareStatement(query)
@@ -66,7 +66,7 @@ class HarvestBatchOperations
     // Update batch information
     public void UpdateHarvestBatch(int BatchID, int AvailableQuantity){
         String query =
-                "update HarvestBatch set AvailableQuantity = ? where BatchID = ?";
+                "UPDATE dbo.HarvestBatch SET AvailableQuantity = ? WHERE BatchID = ?";
 
         try (
                 PreparedStatement stmt = conn.prepareStatement(query)
@@ -80,13 +80,12 @@ class HarvestBatchOperations
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     // Select available batches only
     public void SelectAvailableBatches(){
         String query =
-                "select * from HarvestBatch where AvailableQuantity > 0";
+                "SELECT BatchID, HarvestDate, AvailableQuantity, FreshnessWindow, FarmID FROM dbo.HarvestBatch WHERE AvailableQuantity > 0";
 
         try (
                 PreparedStatement stmt = conn.prepareStatement(query);
@@ -97,7 +96,10 @@ class HarvestBatchOperations
 
                 System.out.println(
                         "Batch ID: " + rs.getInt("BatchID") +
-                        ", Quantity: " + rs.getInt("AvailableQuantity")
+                        ", Harvest Date: " + rs.getString("HarvestDate") +
+                        ", Quantity: " + rs.getInt("AvailableQuantity") +
+                        ", Freshness Window: " + rs.getInt("FreshnessWindow") +
+                        ", Farm ID: " + rs.getInt("FarmID")
                 );
 
             }
@@ -114,7 +116,7 @@ class HarvestBatchOperations
 
         String query =
                 "SELECT h.BatchID, h.AvailableQuantity, h.HarvestDate, c.CropName " +
-                "FROM HarvestBatch h , CropType c " +
+                "FROM dbo.HarvestBatch h, dbo.CropType c " +
                 "WHERE h.CropTypeID = c.CropTypeID";
 
         try (
@@ -126,7 +128,9 @@ class HarvestBatchOperations
 
                 System.out.println(
                         "Batch ID: " + rs.getInt("BatchID") +
-                        ", CropName: " + rs.getString("CropName")
+                        ", CropName: " + rs.getString("CropName") +
+                        ", Quantity: " + rs.getInt("AvailableQuantity") +
+                        ", Harvest Date: " + rs.getString("HarvestDate")
                 );
 
             }

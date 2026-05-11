@@ -1,11 +1,9 @@
 package org.example;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-class RestaurantOperations
-{
+
+import java.sql.*;
+
+class RestaurantOperations {
+
     private Connection conn;
 
     public RestaurantOperations() {
@@ -14,7 +12,7 @@ class RestaurantOperations
             String pass = "123456";
             String url =
                     "jdbc:sqlserver://localhost:1433;"
-                            +"databaseName=FarmRestaurantDB;"
+                            + "databaseName=FarmRestaurantDB;"
                             + "encrypt=true;"
                             + "trustServerCertificate=true;";
 
@@ -26,83 +24,91 @@ class RestaurantOperations
     }
 
     // Insert new restaurant
-    public void InsertRestaurant(String RestaurantName, String City, String Street, String PreferredDeliveryTime){
+    public void InsertRestaurant(String RestaurantName, String City, String Street, String PreferredDeliveryTime) {
+
         String query =
-                "INSERT INTO Restaurant " +
+                "INSERT INTO dbo.Restaurant " +
                         "(RestaurantName, City, Street, PreferredDeliveryWindow) " +
-                        "VALUES ('" + RestaurantName + "', '" +
-                        City + "', '" +
-                        Street + "', '" +
-                        PreferredDeliveryTime + "')";
+                        "VALUES (?, ?, ?, ?)";
 
         try {
 
-            Statement stmt = conn.createStatement();
+            PreparedStatement stmt = conn.prepareStatement(query);
 
-            int rows = stmt.executeUpdate(query);
+            stmt.setString(1, RestaurantName);
+            stmt.setString(2, City);
+            stmt.setString(3, Street);
+            stmt.setString(4, PreferredDeliveryTime);
+
+            int rows = stmt.executeUpdate();
 
             System.out.println(rows + " restaurant inserted.");
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // Delete restaurant by IDz
-    public void DeleteRestaurant(int RestaurantID){
+    // Delete restaurant by ID
+    public void DeleteRestaurant(int RestaurantID) {
+
         String query =
-                "DELETE FROM Restaurant " +
-                        "WHERE RestaurantID = " + RestaurantID;
+                "DELETE FROM dbo.Restaurant " +
+                        "WHERE RestaurantID = ?";
 
         try {
 
-            Statement stmt = conn.createStatement();
+            PreparedStatement stmt = conn.prepareStatement(query);
 
-            int rows = stmt.executeUpdate(query);
+            stmt.setInt(1, RestaurantID);
+
+            int rows = stmt.executeUpdate();
 
             System.out.println(rows + " restaurant deleted.");
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // Update restaurant information
-    public void UpdateRestaurant(int RestaurantID, String RestaurantName, String City, String Street){
+    // Update restaurant Name
+    public void UpdateRestaurantName(int RestaurantID, String RestaurantName) {
+
         String query =
-                "UPDATE Restaurant " +
-                        "SET RestaurantName = '" + RestaurantName + "', " +
-                        "City = '" + City + "', " +
-                        "Street = '" + Street + "' " +
-                        "WHERE RestaurantID = " + RestaurantID;
+                "UPDATE dbo.Restaurant " +
+                        "SET RestaurantName = ? " +
+                        "WHERE RestaurantID = ?";
 
         try {
 
-            Statement stmt = conn.createStatement();
+            PreparedStatement stmt = conn.prepareStatement(query);
 
-            int rows = stmt.executeUpdate(query);
+            stmt.setString(1, RestaurantName);
+            stmt.setInt(2, RestaurantID);
+
+            int rows = stmt.executeUpdate();
 
             System.out.println(rows + " restaurant updated.");
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     // Select restaurants by city
-    public void SelectRestaurantsByCity(String City){
+    public void SelectRestaurantsByCity(String City) {
+
         String query =
-                "SELECT * FROM Restaurant " +
-                        "WHERE City = '" + City + "'";
+                "SELECT * FROM dbo.Restaurant " +
+                        "WHERE City = ?";
 
         try {
 
-            Statement stmt = conn.createStatement();
+            PreparedStatement stmt = conn.prepareStatement(query);
 
-            ResultSet rs = stmt.executeQuery(query);
+            stmt.setString(1, City);
+
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
 
@@ -110,43 +116,42 @@ class RestaurantOperations
                         rs.getInt("RestaurantID") + " | " +
                                 rs.getString("RestaurantName") + " | " +
                                 rs.getString("City") + " | " +
-                                rs.getString("Street")
+                                rs.getString("Street") + " | " +
+                                rs.getString("PreferredDeliveryWindow")
                 );
             }
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // Simple JOIN query:
     // Get restaurants with their orders
-    public void GetRestaurantOrders(){
+    public void GetRestaurantOrders() {
+
         String query =
-                "SELECT Restaurant.RestaurantName, " +
-                        "Orders.OrderID, Orders.TotalAmount " +
-                        "FROM Restaurant " +
-                        "JOIN Orders " +
-                        "ON Restaurant.RestaurantID = Orders.RestaurantID";
+                "SELECT r.RestaurantName, o.OrderID, o.OrderDate, o.TotalAmount " +
+                        "FROM dbo.Restaurant r " +
+                        "JOIN dbo.Orders o " +
+                        "ON r.RestaurantID = o.RestaurantID";
 
         try {
 
-            Statement stmt = conn.createStatement();
+            PreparedStatement stmt = conn.prepareStatement(query);
 
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
 
                 System.out.println(
                         rs.getString("RestaurantName") + " | " +
                                 rs.getInt("OrderID") + " | " +
+                                rs.getString("OrderDate") + " | " +
                                 rs.getDouble("TotalAmount")
                 );
             }
 
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

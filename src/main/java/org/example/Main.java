@@ -1,9 +1,6 @@
 package org.example;
 
 import java.util.Scanner;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
 
 public class Main {
 
@@ -161,10 +158,12 @@ public class Main {
                                String date = sc.nextLine().trim();
                                System.out.print("Quantity (int): ");
                                int qty = Integer.parseInt(sc.nextLine().trim());
-                               System.out.print("Preferred Delivery Window: ");
-                               String window = sc.nextLine().trim();
+                                System.out.print("Freshness Window (int): ");
+                               int window = Integer.parseInt(sc.nextLine().trim());
+                               System.out.print("CropType ID (int): ");
+                               int CropTypeID = Integer.parseInt(sc.nextLine().trim());
 
-                               hb.InsertHarvestBatch(farmId, date, qty, window);
+                               hb.InsertHarvestBatch(farmId, date, qty, window,CropTypeID);
                                System.out.println("InsertHarvestBatch called.");
                            }
                            case "2" -> {
@@ -240,12 +239,8 @@ public class Main {
                                String idStr2 = sc.nextLine().trim();
                                System.out.print("New Restaurant Name: ");
                                String newName = sc.nextLine().trim();
-                               System.out.print("City: ");
-                               String newCity = sc.nextLine().trim();
-                               System.out.print("Street: ");
-                               String newStreet = sc.nextLine().trim();
                                int id2 = Integer.parseInt(idStr2);
-                               ro.UpdateRestaurant(id2, newName, newCity, newStreet);
+                               ro.UpdateRestaurantName(id2, newName);
                                System.out.println("UpdateRestaurant called.");
                            }
                            case "4" -> {

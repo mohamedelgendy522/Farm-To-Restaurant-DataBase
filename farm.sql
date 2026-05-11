@@ -64,7 +64,7 @@ CREATE TABLE dbo.HarvestBatch (
     BatchID INT IDENTITY(1,1) PRIMARY KEY,
     HarvestDate DATE NOT NULL,
     AvailableQuantity INT NOT NULL,
-    FreshnessWindow VARCHAR(100) NOT NULL,
+    FreshnessWindow INT NOT NULL,
     FarmID INT NOT NULL,
     CropTypeID INT NOT NULL,
     CONSTRAINT FK_HarvestBatch_Farm

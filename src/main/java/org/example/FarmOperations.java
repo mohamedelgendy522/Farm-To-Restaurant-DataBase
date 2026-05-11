@@ -162,7 +162,7 @@ class FarmOperations
                 int    batchId   = rs.getInt("BatchID");
                 String harvestDate = rs.getString("HarvestDate");
                 int    qty       = rs.getInt("AvailableQuantity");
-                String freshness = rs.getString("FreshnessWindow");
+                int freshness    = rs.getInt("FreshnessWindow");
                 String cropName  = rs.getString("CropName");
 
                 System.out.println(
@@ -171,7 +171,7 @@ class FarmOperations
                                 " | Crop: " + cropName +
                                 " | Harvested: " + harvestDate +
                                 " | Qty: " + qty +
-                                " | Freshness: " + freshness + " days"
+                                        " | Freshness: " + freshness + " days"
                 );
             }
 
