@@ -26,7 +26,26 @@ class HarvestBatchOperations
     }
 
     // Insert new harvest batch
-    public void InsertHarvestBatch(int FarmID, String HarvestDate, int Quantity, String PreferredDeliveryTime){}
+    public void InsertHarvestBatch(int FarmID, String HarvestDate, int AvailableQuantity, int FreshnessWindow,int croptypeID){
+
+        String query =
+                "INSERT INTO dbo.HarvestBatch(FarmID, HarvestDate, AvailableQuantity, FreshnessWindow,croptypeID) VALUES (?,?,?,?,?)";
+
+        try (
+                PreparedStatement stmt = conn.prepareStatement(query)
+        ){
+             stmt.setInt(1,FarmID);
+             stmt.setString(2,HarvestDate);
+             stmt.setInt(3,AvailableQuantity);
+             stmt.setInt(4,FreshnessWindow);
+             stmt.setInt(5,croptypeID);
+            stmt.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Delete batch by ID
     public void DeleteHarvestBatch(int BatchID){}
