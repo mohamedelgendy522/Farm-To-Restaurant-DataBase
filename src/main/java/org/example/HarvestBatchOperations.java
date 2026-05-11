@@ -88,7 +88,29 @@ class HarvestBatchOperations
     }
 
     // Select available batches only
-    public void SelectAvailableBatches(){}
+    public void SelectAvailableBatches(){
+        String query =
+                "select * from HarvestBatch where AvailableQuantity > 0";
+
+        try (
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery()
+        ){
+
+            while (rs.next()) {
+
+                System.out.println(
+                        "Batch ID: " + rs.getInt("BatchID") +
+                        ", Quantity: " + rs.getInt("AvailableQuantity")
+                );
+
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     // Simple JOIN query:
     // Get harvest batches with crop types
