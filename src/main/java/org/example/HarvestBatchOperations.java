@@ -48,7 +48,24 @@ class HarvestBatchOperations
     }
 
     // Delete batch by ID
-    public void DeleteHarvestBatch(int BatchID){}
+   public void DeleteHarvestBatch(int BatchID){
+
+        String query =
+                "delete HarvestBatch where BatchID = ?";
+
+        try (
+                PreparedStatement stmt = conn.prepareStatement(query)
+        ){
+            stmt.setInt(1,BatchID);
+
+            stmt.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     // Update batch information
     public void UpdateHarvestBatch(int BatchID, int Quantity){}
