@@ -1,14 +1,14 @@
 package org.example.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.TextArea;
+import org.example.models.DriverTripModel;
 import javafx.scene.control.TextField;
 import org.example.operations.DriverOperations;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.example.models.DriverModel;
+
 
 public class DriverController {
 
@@ -19,13 +19,25 @@ public class DriverController {
     private TextField driverIdField;
 
     @FXML
-    private TableView<DriverModel> driverTable;
+    private TableView<DriverTripModel> tripTable;
 
     @FXML
-    private TableColumn<DriverModel, Integer> driverIdColumn;
+    private TableColumn<DriverTripModel, Integer> driverIdColumn;
 
     @FXML
-    private TableColumn<DriverModel, String> driverNameColumn;
+    private TableColumn<DriverTripModel, String> driverNameColumn;
+
+    @FXML
+    private TableColumn<DriverTripModel, Integer> tripIdColumn;
+
+    @FXML
+    private TableColumn<DriverTripModel, String> routeColumn;
+
+    @FXML
+    private TableColumn<DriverTripModel, Double> distanceColumn;
+
+    @FXML
+    private TableColumn<DriverTripModel, String> statusColumn;
 
     DriverOperations driver =
             new DriverOperations();
@@ -39,6 +51,22 @@ public class DriverController {
 
         driverNameColumn.setCellValueFactory(
                 new PropertyValueFactory<>("driverName")
+        );
+
+        tripIdColumn.setCellValueFactory(
+                new PropertyValueFactory<>("tripId")
+        );
+
+        routeColumn.setCellValueFactory(
+                new PropertyValueFactory<>("route")
+        );
+
+        distanceColumn.setCellValueFactory(
+                new PropertyValueFactory<>("distance")
+        );
+
+        statusColumn.setCellValueFactory(
+                new PropertyValueFactory<>("status")
         );
     }
 
@@ -79,19 +107,22 @@ public class DriverController {
     @FXML
     public void selectDriver() {
 
-        ObservableList<DriverModel> drivers =
+        ObservableList<DriverTripModel> trips =
 
                 driver.getDriversByName(
                         driverNameField.getText()
                 );
 
-        driverTable.setItems(drivers);
+        tripTable.setItems(trips);
     }
 
     @FXML
     public void getTrips() {
 
-        driver.GetDriverTrips();
+        ObservableList<DriverTripModel> trips =
 
+                driver.getDriverTrips();
+
+        tripTable.setItems(trips);
     }
 }

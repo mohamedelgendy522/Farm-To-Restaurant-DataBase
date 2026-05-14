@@ -111,7 +111,7 @@ public class FarmController {
     @FXML
     public void getHarvestBatches() {
 
-        GetFarmHarvestBatches();
+
 
     }
 }

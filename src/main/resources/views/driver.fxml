@@ -33,19 +33,35 @@
     <Button text="Get Driver Trips"
             onAction="#getTrips"/>
 
-    <TableView fx:id="driverTable"
-               prefHeight="250"
-               prefWidth="400">
+    <TableView fx:id="tripTable"
+               prefHeight="300"
+               prefWidth="700">
 
         <columns>
 
             <TableColumn fx:id="driverIdColumn"
-                         text="ID"
-                         prefWidth="100"/>
+                         text="Driver ID"
+                         prefWidth="80"/>
 
             <TableColumn fx:id="driverNameColumn"
                          text="Driver Name"
-                         prefWidth="250"/>
+                         prefWidth="150"/>
+
+            <TableColumn fx:id="tripIdColumn"
+                         text="Trip ID"
+                         prefWidth="80"/>
+
+            <TableColumn fx:id="routeColumn"
+                         text="Route"
+                         prefWidth="150"/>
+
+            <TableColumn fx:id="distanceColumn"
+                         text="Distance"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="statusColumn"
+                         text="Status"
+                         prefWidth="120"/>
 
         </columns>
 
