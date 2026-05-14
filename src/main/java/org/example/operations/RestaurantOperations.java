@@ -1,8 +1,11 @@
-package org.example;
+package org.example.operations;
 
 import java.sql.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.example.models.RestaurantModel;
 
-class RestaurantOperations {
+public class RestaurantOperations {
 
     private Connection conn;
 
@@ -95,39 +98,13 @@ class RestaurantOperations {
         }
     }
 
-    // Select restaurants by city
-    public void SelectRestaurantsByCity(String City) {
 
-        String query =
-                "SELECT * FROM dbo.Restaurant " +
-                        "WHERE City = ?";
-
-        try {
-
-            PreparedStatement stmt = conn.prepareStatement(query);
-
-            stmt.setString(1, City);
-
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-
-                System.out.println(
-                        rs.getInt("RestaurantID") + " | " +
-                                rs.getString("RestaurantName") + " | " +
-                                rs.getString("City") + " | " +
-                                rs.getString("Street") + " | " +
-                                rs.getString("PreferredDeliveryWindow")
-                );
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     // Get restaurants with their orders
-    public void GetRestaurantOrders() {
+    public String GetRestaurantOrders() {
+
+        StringBuilder result =
+                new StringBuilder();
 
         String query =
                 "SELECT r.RestaurantName, o.OrderID, o.OrderDate, o.TotalAmount " +
@@ -137,22 +114,85 @@ class RestaurantOperations {
 
         try {
 
-            PreparedStatement stmt = conn.prepareStatement(query);
+            PreparedStatement stmt =
+                    conn.prepareStatement(query);
 
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs =
+                    stmt.executeQuery();
 
             while (rs.next()) {
 
-                System.out.println(
-                        rs.getString("RestaurantName") + " | " +
-                                rs.getInt("OrderID") + " | " +
-                                rs.getString("OrderDate") + " | " +
-                                rs.getDouble("TotalAmount")
+                result.append(
+                        rs.getString("RestaurantName")
+                ).append(" | ");
+
+                result.append(
+                        rs.getInt("OrderID")
+                ).append(" | ");
+
+                result.append(
+                        rs.getString("OrderDate")
+                ).append(" | ");
+
+                result.append(
+                        rs.getDouble("TotalAmount")
+                ).append("\n");
+            }
+
+            rs.close();
+
+            stmt.close();
+
+        } catch (SQLException e) {
+
+            result.append(e.getMessage());
+        }
+
+        return result.toString();
+    }
+
+    // Select restaurants by city
+    public ObservableList<RestaurantModel> getRestaurantsByCity(String city) {
+
+        ObservableList<RestaurantModel> restaurants =
+                FXCollections.observableArrayList();
+
+        String query =
+                "SELECT * FROM dbo.Restaurant " +
+                        "WHERE City = ?";
+
+        try {
+
+            PreparedStatement stmt =
+                    conn.prepareStatement(query);
+
+            stmt.setString(1, city);
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                restaurants.add(
+                        new RestaurantModel(
+                                rs.getInt("RestaurantID"),
+                                rs.getString("RestaurantName"),
+                                rs.getString("City"),
+                                rs.getString("Street")
+
+                        )
                 );
             }
 
+            rs.close();
+
+            stmt.close();
+
         } catch (SQLException e) {
+
             e.printStackTrace();
         }
+
+        return restaurants;
     }
 }

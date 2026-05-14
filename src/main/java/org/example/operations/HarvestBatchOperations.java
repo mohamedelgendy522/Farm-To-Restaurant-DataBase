@@ -1,6 +1,12 @@
-package org.example;
+package org.example.operations;
 import java.sql.*;
-class HarvestBatchOperations
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import org.example.models.HarvestModel;
+public class HarvestBatchOperations
+
+
 {
     private Connection conn;
 
@@ -82,61 +88,96 @@ class HarvestBatchOperations
         }
     }
 
-    // Select available batches only
-    public void SelectAvailableBatches(){
-        String query =
-                "SELECT BatchID, HarvestDate, AvailableQuantity, FreshnessWindow, FarmID FROM dbo.HarvestBatch WHERE AvailableQuantity > 0";
-
-        try (
-                PreparedStatement stmt = conn.prepareStatement(query);
-                ResultSet rs = stmt.executeQuery()
-        ){
-
-            while (rs.next()) {
-
-                System.out.println(
-                        "Batch ID: " + rs.getInt("BatchID") +
-                        ", Harvest Date: " + rs.getString("HarvestDate") +
-                        ", Quantity: " + rs.getInt("AvailableQuantity") +
-                        ", Freshness Window: " + rs.getInt("FreshnessWindow") +
-                        ", Farm ID: " + rs.getInt("FarmID")
-                );
-
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     // Simple JOIN query:
     // Get harvest batches with crop types
-    public void GetBatchCropTypes() {
+    public ObservableList<HarvestModel> getBatchCropTypes() {
+
+        ObservableList<HarvestModel> batches =
+                FXCollections.observableArrayList();
 
         String query =
-                "SELECT h.BatchID, h.AvailableQuantity, h.HarvestDate, c.CropName " +
-                "FROM dbo.HarvestBatch h, dbo.CropType c " +
-                "WHERE h.CropTypeID = c.CropTypeID";
+                "SELECT h.BatchID, " +
+                        "h.AvailableQuantity, " +
+                        "h.HarvestDate, " +
+                        "c.CropName " +
+                        "FROM dbo.HarvestBatch h, dbo.CropType c " +
+                        "WHERE h.CropTypeID = c.CropTypeID";
 
-        try (
-                PreparedStatement stmt = conn.prepareStatement(query);
-                ResultSet rs = stmt.executeQuery()
-        ) {
+        try {
+
+            PreparedStatement stmt =
+                    conn.prepareStatement(query);
+
+            ResultSet rs =
+                    stmt.executeQuery();
 
             while (rs.next()) {
 
-                System.out.println(
-                        "Batch ID: " + rs.getInt("BatchID") +
-                        ", CropName: " + rs.getString("CropName") +
-                        ", Quantity: " + rs.getInt("AvailableQuantity") +
-                        ", Harvest Date: " + rs.getString("HarvestDate")
+                batches.add(
+                        new HarvestModel(
+                                rs.getInt("BatchID"),
+                                rs.getInt("AvailableQuantity"),
+                                rs.getString("HarvestDate"),
+                                rs.getString("CropName")
+                        )
                 );
-
             }
 
+            rs.close();
+
+            stmt.close();
+
         } catch (SQLException e) {
+
             e.printStackTrace();
         }
+
+        return batches;
     }
+
+    // Select available batches only
+    public ObservableList<HarvestModel> getAvailableBatches() {
+
+        ObservableList<HarvestModel> batches =
+                FXCollections.observableArrayList();
+
+        String query =
+                "SELECT BatchID, AvailableQuantity, HarvestDate " +
+                        "FROM dbo.HarvestBatch " +
+                        "WHERE AvailableQuantity > 0";
+
+        try {
+
+            PreparedStatement stmt =
+                    conn.prepareStatement(query);
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                batches.add(
+                        new HarvestModel(
+                                rs.getInt("BatchID"),
+                                rs.getInt("AvailableQuantity"),
+                                rs.getString("HarvestDate"),
+                                ""
+                        )
+                );
+            }
+
+            rs.close();
+
+            stmt.close();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+        return batches;
+    }
+
+
 }

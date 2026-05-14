@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controllers.DriverController"
+      spacing="10"
+      alignment="CENTER"
+      prefWidth="600"
+      prefHeight="500">
+
+    <Label text="Driver Operations"/>
+
+    <TextField fx:id="driverNameField"
+               promptText="Driver Name"/>
+
+    <TextField fx:id="driverIdField"
+               promptText="Driver ID"/>
+
+    <Button text="Insert Driver"
+            onAction="#insertDriver"/>
+
+    <Button text="Delete Driver"
+            onAction="#deleteDriver"/>
+
+    <Button text="Update Driver"
+            onAction="#updateDriver"/>
+
+    <Button text="Select Driver By Name"
+            onAction="#selectDriver"/>
+
+    <Button text="Get Driver Trips"
+            onAction="#getTrips"/>
+
+    <TableView fx:id="driverTable"
+               prefHeight="250"
+               prefWidth="400">
+
+        <columns>
+
+            <TableColumn fx:id="driverIdColumn"
+                         text="ID"
+                         prefWidth="100"/>
+
+            <TableColumn fx:id="driverNameColumn"
+                         text="Driver Name"
+                         prefWidth="250"/>
+
+        </columns>
+
+    </TableView>
+
+</VBox>

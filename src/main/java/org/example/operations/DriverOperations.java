@@ -1,12 +1,15 @@
-package org.example;
+package org.example.operations;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.example.models.DriverModel;
 
-class DriverOperations
+public class DriverOperations
 {
     private Connection conn;
 
@@ -176,5 +179,47 @@ class DriverOperations
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public ObservableList<DriverModel> getDriversByName(String name) {
+
+        ObservableList<DriverModel> drivers =
+                FXCollections.observableArrayList();
+
+        String query =
+                "SELECT DriverID, DriverName " +
+                        "FROM dbo.Driver " +
+                        "WHERE DriverName = ?";
+
+        try {
+
+            PreparedStatement stmt =
+                    conn.prepareStatement(query);
+
+            stmt.setString(1, name);
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                drivers.add(
+                        new DriverModel(
+                                rs.getInt("DriverID"),
+                                rs.getString("DriverName")
+                        )
+                );
+            }
+
+            rs.close();
+
+            stmt.close();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+        return drivers;
     }
 }

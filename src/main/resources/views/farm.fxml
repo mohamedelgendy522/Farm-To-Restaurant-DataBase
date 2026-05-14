@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controllers.FarmController"
+      spacing="10"
+      alignment="CENTER"
+      prefWidth="600"
+      prefHeight="500">
+
+    <Label text="Farm Operations"/>
+
+    <TextField fx:id="nameField"
+               promptText="Farm Name"/>
+
+    <TextField fx:id="cityField"
+               promptText="City"/>
+
+    <TextField fx:id="regionField"
+               promptText="Region"/>
+
+    <TextField fx:id="farmIdField"
+               promptText="Farm ID"/>
+
+    <Button text="Insert Farm"
+            onAction="#insertFarm"/>
+
+    <Button text="Delete Farm"
+            onAction="#deleteFarm"/>
+
+    <Button text="Update Farm Name"
+            onAction="#updateFarm"/>
+
+    <Button text="Select Farms By City"
+            onAction="#selectFarmByCity"/>
+
+    <Button text="Get Harvest Batches"
+            onAction="#getHarvestBatches"/>
+
+    <TableView fx:id="farmTable"
+               prefHeight="250"
+               prefWidth="500">
+
+        <columns>
+
+            <TableColumn fx:id="idColumn"
+                         text="ID"
+                         prefWidth="80"/>
+
+            <TableColumn fx:id="nameColumn"
+                         text="Farm Name"
+                         prefWidth="150"/>
+
+            <TableColumn fx:id="cityColumn"
+                         text="City"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="regionColumn"
+                         text="Region"
+                         prefWidth="120"/>
+
+        </columns>
+
+    </TableView>
+</VBox>

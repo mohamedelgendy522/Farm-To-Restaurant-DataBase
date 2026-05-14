@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controllers.InquiryController"
+      spacing="10"
+      alignment="CENTER"
+      prefWidth="700"
+      prefHeight="600">
+
+    <Label text="Inquiry Reports"/>
+
+    <Button text="Top Crop Type"
+            onAction="#topCrop"/>
+
+    <Button text="Inactive Farms Last Month"
+            onAction="#inactiveFarms"/>
+
+    <Button text="Top Driver Last Month"
+            onAction="#topDriver"/>
+
+    <Button text="Restaurants Without Orders"
+            onAction="#restaurantsWithoutOrders"/>
+
+    <Button text="Restaurant Delivered Batches"
+            onAction="#restaurantDelivered"/>
+
+    <Button text="Farm Revenue"
+            onAction="#farmRevenue"/>
+
+    <TextArea fx:id="outputArea"
+              prefHeight="300"
+              prefWidth="500"/>
+
+</VBox>

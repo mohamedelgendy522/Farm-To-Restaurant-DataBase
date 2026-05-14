@@ -1,0 +1,17 @@
+.root {
+    -fx-padding: 20;
+    -fx-font-size: 14;
+}
+
+.button {
+    -fx-pref-width: 200;
+    -fx-pref-height: 35;
+}
+
+.text-field {
+    -fx-pref-width: 250;
+}
+
+.text-area {
+    -fx-pref-width: 400;
+}

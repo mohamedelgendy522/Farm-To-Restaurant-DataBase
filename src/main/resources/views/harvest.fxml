@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controllers.HarvestController"
+      spacing="10"
+      alignment="CENTER"
+      prefWidth="600"
+      prefHeight="600">
+
+    <Label text="Harvest Batch Operations"/>
+
+    <TextField fx:id="batchIdField"
+               promptText="Batch ID"/>
+
+    <TextField fx:id="farmIdField"
+               promptText="Farm ID"/>
+
+    <TextField fx:id="dateField"
+               promptText="Harvest Date"/>
+
+    <TextField fx:id="quantityField"
+               promptText="Quantity"/>
+
+    <TextField fx:id="freshnessField"
+               promptText="Freshness Window"/>
+
+    <TextField fx:id="cropTypeField"
+               promptText="Crop Type ID"/>
+
+    <Button text="Insert Batch"
+            onAction="#insertBatch"/>
+
+    <Button text="Delete Batch"
+            onAction="#deleteBatch"/>
+
+    <Button text="Update Quantity"
+            onAction="#updateBatch"/>
+
+    <Button text="Available Batches"
+            onAction="#availableBatches"/>
+
+    <Button text="Batch Crop Types"
+            onAction="#batchCropTypes"/>
+
+    <TableView fx:id="harvestTable"
+               prefHeight="250"
+               prefWidth="500">
+
+        <columns>
+
+            <TableColumn fx:id="batchIdColumn"
+                         text="Batch ID"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="quantityColumn"
+                         text="Quantity"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="dateColumn"
+                         text="Harvest Date"
+                         prefWidth="200"/>
+
+            <TableColumn fx:id="cropColumn"
+                         text="Crop"
+                         prefWidth="150"/>
+
+        </columns>
+
+    </TableView>
+
+</VBox>
