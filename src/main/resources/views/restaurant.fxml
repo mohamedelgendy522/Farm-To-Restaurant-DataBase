@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controllers.RestaurantController"
+      spacing="10"
+      alignment="TOP_CENTER"
+      prefWidth="600"
+      prefHeight="600"
+      style="-fx-padding: 20;">
+
+    <Label text="Restaurant Management"/>
+
+    <TextField fx:id="restaurantIdField"
+               promptText="Restaurant ID"/>
+
+    <TextField fx:id="nameField"
+               promptText="Restaurant Name"/>
+
+    <TextField fx:id="cityField"
+               promptText="City"/>
+
+    <TextField fx:id="streetField"
+               promptText="Street"/>
+
+    <TextField fx:id="windowField"
+               promptText="Delivery Window"/>
+
+    <Button text="Insert Restaurant"
+            onAction="#insertRestaurant"/>
+
+    <Button text="Delete Restaurant"
+            onAction="#deleteRestaurant"/>
+
+    <Button text="Update Restaurant"
+            onAction="#updateRestaurant"/>
+
+    <Button text="Select By City"
+            onAction="#selectByCity"/>
+
+    <Button text="Get Orders"
+            onAction="#getOrders"/>
+
+    <TableView fx:id="restaurantTable"
+               prefHeight="250"
+               prefWidth="600">
+
+        <columns>
+
+            <TableColumn fx:id="restaurantIdColumn"
+                         text="ID"
+                         prefWidth="80"/>
+
+            <TableColumn fx:id="restaurantNameColumn"
+                         text="Restaurant"
+                         prefWidth="180"/>
+
+            <TableColumn fx:id="cityColumn"
+                         text="City"
+                         prefWidth="150"/>
+
+            <TableColumn fx:id="streetColumn"
+                         text="Street"
+                         prefWidth="180"/>
+
+        </columns>
+
+    </TableView>
+
+    <TextArea fx:id="outputArea"
+              prefHeight="150"
+              prefWidth="500"/>
+
+</VBox>

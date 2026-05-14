@@ -1,12 +1,16 @@
-package org.example;
+package org.example.operations;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.example.models.DriverModel;
+import org.example.models.DriverTripModel;
 
-class DriverOperations
+public class DriverOperations
 {
     private Connection conn;
 
@@ -176,5 +180,113 @@ class DriverOperations
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public ObservableList<DriverTripModel> getDriversByName(String name) {
+
+        ObservableList<DriverTripModel> trips =
+                FXCollections.observableArrayList();
+
+        String query = """
+            SELECT
+                d.DriverID,
+                d.DriverName,
+                t.TripID,
+                t.Route,
+                t.TotalDistance,
+                t.Status
+            FROM dbo.Driver d
+            LEFT JOIN dbo.DeliveryTrip t
+                ON d.DriverID = t.DriverID
+            WHERE d.DriverName LIKE ?
+            """;
+
+        try {
+
+            PreparedStatement stmt =
+                    conn.prepareStatement(query);
+
+            stmt.setString(1, "%" + name + "%");
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                trips.add(
+                        new DriverTripModel(
+                                rs.getInt("DriverID"),
+                                rs.getString("DriverName"),
+                                rs.getInt("TripID"),
+                                rs.getString("Route"),
+                                rs.getDouble("TotalDistance"),
+                                rs.getString("Status")
+                        )
+                );
+            }
+
+            rs.close();
+
+            stmt.close();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+        return trips;
+    }
+
+    public ObservableList<DriverTripModel> getDriverTrips() {
+
+        ObservableList<DriverTripModel> trips =
+                FXCollections.observableArrayList();
+
+        String query = """
+            SELECT
+                d.DriverID,
+                d.DriverName,
+                t.TripID,
+                t.Route,
+                t.TotalDistance,
+                t.Status
+            FROM dbo.Driver d
+            JOIN dbo.DeliveryTrip t
+                ON d.DriverID = t.DriverID
+            ORDER BY d.DriverID;
+            """;
+
+        try {
+
+            PreparedStatement stmt =
+                    conn.prepareStatement(query);
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                trips.add(
+                        new DriverTripModel(
+                                rs.getInt("DriverID"),
+                                rs.getString("DriverName"),
+                                rs.getInt("TripID"),
+                                rs.getString("Route"),
+                                rs.getDouble("TotalDistance"),
+                                rs.getString("Status")
+                        )
+                );
+            }
+
+            rs.close();
+
+            stmt.close();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+
+        return trips;
     }
 }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.controllers.DriverController"
+      spacing="15"
+      alignment="TOP_CENTER"
+      prefWidth="600"
+      prefHeight="500"
+      style="-fx-padding: 20;">
+
+    <Label text="Driver Management"/>
+
+    <TextField fx:id="driverNameField"
+               promptText="Driver Name"/>
+
+    <TextField fx:id="driverIdField"
+               promptText="Driver ID"/>
+
+    <Button text="Insert Driver"
+            onAction="#insertDriver"/>
+
+    <Button text="Delete Driver"
+            onAction="#deleteDriver"/>
+
+    <Button text="Update Driver"
+            onAction="#updateDriver"/>
+
+    <Button text="Select Driver By Name"
+            onAction="#selectDriver"/>
+
+    <Button text="Get Driver Trips"
+            onAction="#getTrips"/>
+
+    <TableView fx:id="tripTable"
+               prefHeight="300"
+               prefWidth="700">
+
+        <columns>
+
+            <TableColumn fx:id="driverIdColumn"
+                         text="Driver ID"
+                         prefWidth="80"/>
+
+            <TableColumn fx:id="driverNameColumn"
+                         text="Driver Name"
+                         prefWidth="150"/>
+
+            <TableColumn fx:id="tripIdColumn"
+                         text="Trip ID"
+                         prefWidth="80"/>
+
+            <TableColumn fx:id="routeColumn"
+                         text="Route"
+                         prefWidth="150"/>
+
+            <TableColumn fx:id="distanceColumn"
+                         text="Distance"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="statusColumn"
+                         text="Status"
+                         prefWidth="120"/>
+
+        </columns>
+
+    </TableView>
+
+</VBox>
