@@ -5,14 +5,14 @@ public class DashboardController {
     public void openFarmScreen() {
         SceneManager.switchScene(
                 "farm.fxml",
-                "Farm Operations"
+                "Farm"
         );
     }
 
     public void openDriverScreen() {
         SceneManager.switchScene(
                 "driver.fxml",
-                "Driver Operations"
+                "Drivers"
         );
     }
 
@@ -20,7 +20,7 @@ public class DashboardController {
 
         SceneManager.switchScene(
                 "harvest.fxml",
-                "Harvest Operations"
+                "Harvest Batches"
         );
     }
 
@@ -28,7 +28,7 @@ public class DashboardController {
 
         SceneManager.switchScene(
                 "restaurant.fxml",
-                "Restaurant Operations"
+                "Restaurants"
         );
     }
 
@@ -36,7 +36,7 @@ public class DashboardController {
 
         SceneManager.switchScene(
                 "inquiry.fxml",
-                "Inquiry Reports"
+                "Reports"
         );
     }
 }

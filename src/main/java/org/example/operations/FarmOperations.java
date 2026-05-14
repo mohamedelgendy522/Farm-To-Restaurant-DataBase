@@ -163,27 +163,26 @@ public class FarmOperations
 
 
     // Get farms with their harvest batches
-    public String GetFarmHarvestBatches() {
+    public ObservableList<FarmModel> GetFarmHarvestBatches() {
+
+        ObservableList<FarmModel> batches =
+                FXCollections.observableArrayList();
 
         String query = """
-            SELECT
-                f.FarmID,
-                f.FarmName,
-                hb.BatchID,
-                hb.HarvestDate,
-                hb.AvailableQuantity,
-                hb.FreshnessWindow,
-                ct.CropName
-            FROM dbo.Farm f
-            JOIN dbo.HarvestBatch hb
-                ON f.FarmID = hb.FarmID
-            JOIN dbo.CropType ct
-                ON hb.CropTypeID = ct.CropTypeID
-            ORDER BY f.FarmID, hb.BatchID;
-            """;
-
-        StringBuilder result =
-                new StringBuilder();
+        SELECT
+            f.FarmID,
+            f.FarmName,
+            hb.BatchID,
+            hb.HarvestDate,
+            hb.AvailableQuantity,
+            ct.CropName
+        FROM dbo.Farm f
+        JOIN dbo.HarvestBatch hb
+            ON f.FarmID = hb.FarmID
+        JOIN dbo.CropType ct
+            ON hb.CropTypeID = ct.CropTypeID
+        ORDER BY f.FarmID, hb.BatchID;
+        """;
 
         try {
 
@@ -195,35 +194,16 @@ public class FarmOperations
 
             while (rs.next()) {
 
-                result.append(
-                        "Farm: "
-                ).append(
-                        rs.getString("FarmName")
-                ).append("\n");
-
-                result.append(
-                        "Batch ID: "
-                ).append(
-                        rs.getInt("BatchID")
-                ).append("\n");
-
-                result.append(
-                        "Crop: "
-                ).append(
-                        rs.getString("CropName")
-                ).append("\n");
-
-                result.append(
-                        "Quantity: "
-                ).append(
-                        rs.getInt("AvailableQuantity")
-                ).append("\n");
-
-                result.append(
-                        "Harvest Date: "
-                ).append(
-                        rs.getString("HarvestDate")
-                ).append("\n\n");
+                batches.add(
+                        new FarmModel(
+                                rs.getInt("FarmID"),
+                                rs.getString("FarmName"),
+                                rs.getInt("BatchID"),
+                                rs.getString("HarvestDate"),
+                                rs.getInt("AvailableQuantity"),
+                                rs.getString("CropName")
+                        )
+                );
             }
 
             rs.close();
@@ -232,12 +212,10 @@ public class FarmOperations
 
         } catch (SQLException e) {
 
-            result.append(
-                    e.getMessage()
-            );
+            e.printStackTrace();
         }
 
-        return result.toString();
+        return batches;
     }
 
     public ObservableList<FarmModel> getFarmsByCity(String city) {

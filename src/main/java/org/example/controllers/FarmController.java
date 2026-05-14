@@ -39,6 +39,18 @@ public class FarmController {
     @FXML
     private TableColumn<FarmModel, String> regionColumn;
 
+    @FXML
+    private TableColumn<FarmModel, Integer> batchColumn;
+
+    @FXML
+    private TableColumn<FarmModel, String> dateColumn;
+
+    @FXML
+    private TableColumn<FarmModel, Integer> quantityColumn;
+
+    @FXML
+    private TableColumn<FarmModel, String> cropColumn;
+
     FarmOperations farm = new FarmOperations();
 
     @FXML
@@ -58,6 +70,22 @@ public class FarmController {
 
         regionColumn.setCellValueFactory(
                 new PropertyValueFactory<>("region")
+        );
+
+        batchColumn.setCellValueFactory(
+                new PropertyValueFactory<>("batchId")
+        );
+
+        dateColumn.setCellValueFactory(
+                new PropertyValueFactory<>("harvestDate")
+        );
+
+        quantityColumn.setCellValueFactory(
+                new PropertyValueFactory<>("quantity")
+        );
+
+        cropColumn.setCellValueFactory(
+                new PropertyValueFactory<>("cropName")
         );
     }
 
@@ -111,7 +139,10 @@ public class FarmController {
     @FXML
     public void getHarvestBatches() {
 
+        ObservableList<FarmModel> batches =
 
+                farm.GetFarmHarvestBatches();
 
+        farmTable.setItems(batches);
     }
 }

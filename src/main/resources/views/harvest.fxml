@@ -5,12 +5,13 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.controllers.HarvestController"
-      spacing="10"
-      alignment="CENTER"
+      spacing="15"
+      alignment="TOP_CENTER"
       prefWidth="600"
-      prefHeight="600">
+      prefHeight="600"
+      style="-fx-padding: 20;">
 
-    <Label text="Harvest Batch Operations"/>
+    <Label text="Harvest Batch Management"/>
 
     <TextField fx:id="batchIdField"
                promptText="Batch ID"/>

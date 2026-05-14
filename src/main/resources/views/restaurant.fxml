@@ -6,11 +6,12 @@
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.controllers.RestaurantController"
       spacing="10"
-      alignment="CENTER"
+      alignment="TOP_CENTER"
       prefWidth="600"
-      prefHeight="600">
+      prefHeight="600"
+      style="-fx-padding: 20;">
 
-    <Label text="Restaurant Operations"/>
+    <Label text="Restaurant Management"/>
 
     <TextField fx:id="restaurantIdField"
                promptText="Restaurant ID"/>

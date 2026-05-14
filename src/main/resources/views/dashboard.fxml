@@ -8,19 +8,19 @@
       spacing="20"
       alignment="CENTER">
 
-    <Button text="Farm Operations"
+    <Button text="Farm"
             onAction="#openFarmScreen"/>
 
-    <Button text="Driver Operations"
+    <Button text="Drivers"
             onAction="#openDriverScreen"/>
 
-    <Button text="Harvest Batch Operations"
+    <Button text="Harvest Batches"
             onAction="#openHarvestScreen"/>
 
-    <Button text="Restaurant Operations"
+    <Button text="Restaurants"
             onAction="#openRestaurantScreen"/>
 
-    <Button text="Inquiry Reports"
+    <Button text="Reports"
             onAction="#openInquiryScreen"/>
 
 </VBox>
