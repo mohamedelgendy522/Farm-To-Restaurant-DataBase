@@ -5,10 +5,10 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.controllers.RestaurantController"
-      spacing="10"
+      spacing="15"
       alignment="TOP_CENTER"
       prefWidth="600"
-      prefHeight="600"
+      prefHeight="650"
       style="-fx-padding: 20;">
 
     <Label text="Restaurant Management"/>
@@ -45,7 +45,7 @@
 
     <TableView fx:id="restaurantTable"
                prefHeight="250"
-               prefWidth="600">
+               prefWidth="650">
 
         <columns>
 
@@ -65,12 +65,21 @@
                          text="Street"
                          prefWidth="180"/>
 
+            <TableColumn fx:id="orderIdColumn"
+                         text="Order ID"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="dateColumn"
+                         text="Order Date"
+                         prefWidth="180"/>
+
+            <TableColumn fx:id="amountColumn"
+                         text="Total Amount"
+                         prefWidth="150"/>
+
         </columns>
 
     </TableView>
 
-    <TextArea fx:id="outputArea"
-              prefHeight="150"
-              prefWidth="500"/>
 
 </VBox>

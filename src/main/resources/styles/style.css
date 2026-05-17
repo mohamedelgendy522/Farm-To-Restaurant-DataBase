@@ -70,6 +70,21 @@
     -fx-font-weight: bold;
 }
 
+.table-view .table-cell {
+    -fx-alignment: CENTER;
+}
+
 .table-row-cell:selected {
-    -fx-background-color: #d6eaf8;
+    -fx-background-color: #bcbcbc;
+}
+
+.text-area {
+
+    -fx-font-family: "Cascadia Code";
+
+    -fx-font-size: 14px;
+
+    -fx-highlight-fill: #3498db;
+
+    -fx-highlight-text-fill: white;
 }
