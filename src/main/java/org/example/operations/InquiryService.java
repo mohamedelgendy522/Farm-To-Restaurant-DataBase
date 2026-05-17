@@ -47,8 +47,17 @@ public class InquiryService {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return "Top Crop: " + rs.getString("CropName")
-                        + "\nTotal Orders: " + rs.getInt("TotalOrders");
+                return """
+                ========================================
+                TOP CROP REPORT
+                ========================================
+                Crop Name    : %s
+                Total Orders : %d
+                ========================================
+                """.formatted(
+                        rs.getString("CropName"),
+                        rs.getInt("TotalOrders")
+                );
             }
 
         } catch (SQLException e) {
@@ -80,7 +89,24 @@ public class InquiryService {
             StringBuilder sb = new StringBuilder();
 
             while (rs.next()) {
-                sb.append(rs.getString("FarmName")).append("\n");
+
+                sb.append(
+                        "========================================\n"
+                );
+
+                sb.append(
+                        "Inactive Farm : "
+                ).append(
+                        rs.getString("FarmName")
+                ).append("\n");
+
+                sb.append(
+                        "========================================\n\n"
+                );
+            }
+            if (sb.isEmpty()) {
+
+                sb.append("No inactive farms found.");
             }
 
             return sb.toString();
@@ -108,9 +134,17 @@ public class InquiryService {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return rs.getString("DriverName")
-                        + " - Trips: "
-                        + rs.getInt("Trips");
+                return """
+                ========================================
+                TOP DRIVER REPORT
+                ========================================
+                Driver Name : %s
+                Trips Count : %d
+                ========================================
+                """.formatted(
+                        rs.getString("DriverName"),
+                        rs.getInt("Trips")
+                );
             }
 
         } catch (SQLException e) {
@@ -140,7 +174,28 @@ public class InquiryService {
             StringBuilder sb = new StringBuilder();
 
             while (rs.next()) {
-                sb.append(rs.getString("RestaurantName")).append("\n");
+
+                sb.append(
+                        "========================================\n"
+                );
+
+                sb.append(
+                        "Restaurant : "
+                ).append(
+                        rs.getString("RestaurantName")
+                ).append("\n");
+
+                sb.append(
+                        "Status     : No Orders Last Month\n"
+                );
+
+                sb.append(
+                        "========================================\n\n"
+                );
+            }
+            if (sb.isEmpty()) {
+
+                sb.append("All restaurants have orders.");
             }
 
             return sb.toString();
@@ -164,23 +219,60 @@ public class InquiryService {
     """;
 
         try {
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
 
-            StringBuilder sb = new StringBuilder();
+            PreparedStatement stmt =
+                    conn.prepareStatement(query);
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            StringBuilder sb =
+                    new StringBuilder();
 
             while (rs.next()) {
-                sb.append(rs.getString("RestaurantName"))
-                        .append(" | Batch: ")
-                        .append(rs.getInt("BatchID"))
-                        .append(" | Crop: ")
-                        .append(rs.getString("CropName"))
-                        .append("\n");
+
+                sb.append(
+                        "========================================\n"
+                );
+
+                sb.append(
+                        "Restaurant : "
+                ).append(
+                        rs.getString("RestaurantName")
+                ).append("\n");
+
+                sb.append(
+                        "Batch ID   : "
+                ).append(
+                        rs.getInt("BatchID")
+                ).append("\n");
+
+                sb.append(
+                        "Crop       : "
+                ).append(
+                        rs.getString("CropName")
+                ).append("\n");
+
+                sb.append(
+                        "========================================\n\n"
+                );
             }
+
+            if (sb.isEmpty()) {
+
+                sb.append(
+                        "No data found."
+                );
+            }
+
+            rs.close();
+
+            stmt.close();
 
             return sb.toString();
 
         } catch (SQLException e) {
+
             return e.getMessage();
         }
     }
@@ -212,19 +304,34 @@ public class InquiryService {
             ResultSet rs = stmt.executeQuery();
 
             StringBuilder result = new StringBuilder();
-            result.append("Farm Revenue Report:\n\n");
 
             while (rs.next()) {
-                int farmId = rs.getInt("FarmID");
-                String farmName = rs.getString("FarmName");
-                double revenue = rs.getDouble("TotalRevenue");
 
-                result.append(farmId)
-                        .append(" - ")
-                        .append(farmName)
-                        .append(" | Revenue: ")
-                        .append(revenue)
-                        .append("\n");
+                result.append(
+                        "========================================\n"
+                );
+
+                result.append(
+                        "Farm ID    : "
+                ).append(
+                        rs.getInt("FarmID")
+                ).append("\n");
+
+                result.append(
+                        "Farm Name  : "
+                ).append(
+                        rs.getString("FarmName")
+                ).append("\n");
+
+                result.append(
+                        "Revenue    : "
+                ).append(
+                        rs.getDouble("TotalRevenue")
+                ).append("\n");
+
+                result.append(
+                        "========================================\n\n"
+                );
             }
 
             rs.close();

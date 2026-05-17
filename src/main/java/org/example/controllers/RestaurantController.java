@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 import org.example.operations.RestaurantOperations;
-import javafx.scene.control.TextArea;
+
 import javafx.collections.ObservableList;
 
 import javafx.scene.control.TableColumn;
@@ -47,7 +47,14 @@ public class RestaurantController {
     private TableColumn<RestaurantModel, String> streetColumn;
 
     @FXML
-    private TextArea outputArea;
+    private TableColumn<RestaurantModel, Integer> orderIdColumn;
+
+    @FXML
+    private TableColumn<RestaurantModel, String> dateColumn;
+
+    @FXML
+    private TableColumn<RestaurantModel, Double> amountColumn;
+
 
 
     RestaurantOperations restaurant =
@@ -70,6 +77,18 @@ public class RestaurantController {
 
         streetColumn.setCellValueFactory(
                 new PropertyValueFactory<>("street")
+        );
+
+        orderIdColumn.setCellValueFactory(
+                new PropertyValueFactory<>("orderId")
+        );
+
+        dateColumn.setCellValueFactory(
+                new PropertyValueFactory<>("orderDate")
+        );
+
+        amountColumn.setCellValueFactory(
+                new PropertyValueFactory<>("totalAmount")
         );
 
     }
@@ -125,10 +144,10 @@ public class RestaurantController {
     @FXML
     public void getOrders() {
 
-        String result =
+        ObservableList<RestaurantModel> orders =
+
                 restaurant.GetRestaurantOrders();
 
-        outputArea.setText(result);
-
+        restaurantTable.setItems(orders);
     }
 }

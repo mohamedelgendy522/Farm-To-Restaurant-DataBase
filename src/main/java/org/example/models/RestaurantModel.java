@@ -10,6 +10,12 @@ public class RestaurantModel {
 
     private String street;
 
+    private int orderId;
+
+    private String orderDate;
+
+    private double totalAmount;
+
 
 
     public RestaurantModel(
@@ -27,6 +33,19 @@ public class RestaurantModel {
 
     }
 
+    public RestaurantModel(
+            String restaurantName,
+            int orderId,
+            String orderDate,
+            double totalAmount
+    ) {
+
+        this.restaurantName = restaurantName;
+        this.orderId = orderId;
+        this.orderDate = orderDate;
+        this.totalAmount = totalAmount;
+    }
+
     public int getRestaurantId() {
         return restaurantId;
     }
@@ -42,5 +61,11 @@ public class RestaurantModel {
     public String getStreet() {
         return street;
     }
+
+    public int getOrderId() { return orderId; }
+
+    public String getOrderDate() { return orderDate; }
+
+    public double getTotalAmount() { return totalAmount; }
 
 }

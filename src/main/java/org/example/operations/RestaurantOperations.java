@@ -101,10 +101,10 @@ public class RestaurantOperations {
 
 
     // Get restaurants with their orders
-    public String GetRestaurantOrders() {
+    public ObservableList<RestaurantModel> GetRestaurantOrders() {
 
-        StringBuilder result =
-                new StringBuilder();
+        ObservableList<RestaurantModel> orders =
+                FXCollections.observableArrayList();
 
         String query =
                 "SELECT r.RestaurantName, o.OrderID, o.OrderDate, o.TotalAmount " +
@@ -122,21 +122,14 @@ public class RestaurantOperations {
 
             while (rs.next()) {
 
-                result.append(
-                        rs.getString("RestaurantName")
-                ).append(" | ");
-
-                result.append(
-                        rs.getInt("OrderID")
-                ).append(" | ");
-
-                result.append(
-                        rs.getString("OrderDate")
-                ).append(" | ");
-
-                result.append(
-                        rs.getDouble("TotalAmount")
-                ).append("\n");
+                orders.add(
+                        new RestaurantModel(
+                                rs.getString("RestaurantName"),
+                                rs.getInt("OrderID"),
+                                rs.getString("OrderDate"),
+                                rs.getDouble("TotalAmount")
+                        )
+                );
             }
 
             rs.close();
@@ -145,10 +138,10 @@ public class RestaurantOperations {
 
         } catch (SQLException e) {
 
-            result.append(e.getMessage());
+            e.printStackTrace();
         }
 
-        return result.toString();
+        return orders;
     }
 
     // Select restaurants by city
